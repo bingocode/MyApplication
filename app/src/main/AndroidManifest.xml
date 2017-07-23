@@ -19,10 +19,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".FirstActivity"
-            android:label="First">
+        <activity
+            android:name=".FirstActivity"
+            android:label="First" />
+        <activity
+            android:name=".SecondActivity"
+            android:label="Second">
+            <intent-filter>
+                <action android:name="com.example.admin.fisrtdemo.ACTION_START" />
 
+                <category android:name="com.example.admin.fisrtdemo.MY_CATAGORY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
+        <activity android:name=".ThirdActivity" />
+        <activity
+            android:name=".FruitActivity"
+            android:theme="@style/FruitActivityTheme" />
+        <activity android:name=".MyListviewActivity"></activity>
     </application>
 
 </manifest>

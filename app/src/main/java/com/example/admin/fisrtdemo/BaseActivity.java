@@ -14,7 +14,6 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Toast.makeText(this, "ok", Toast.LENGTH_SHORT).show();
         Log.v("BaseAcitvity", getClass().getSimpleName());
         ActivityCollector.addActivity(this);
     }
