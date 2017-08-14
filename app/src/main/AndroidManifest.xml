@@ -36,7 +36,8 @@
         <activity
             android:name=".FruitActivity"
             android:theme="@style/FruitActivityTheme" />
-        <activity android:name=".MyListviewActivity"></activity>
+        <activity android:name=".MyListviewActivity" />
+        <activity android:name=".CustomViewActivity"></activity>
     </application>
 
 </manifest>
