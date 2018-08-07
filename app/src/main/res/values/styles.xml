@@ -10,4 +10,9 @@
     <style name="FruitActivityTheme" parent="AppTheme">
     </style>
 
+    <declare-styleable name="RippleView">
+        <attr name="pressed" format="reference"/>
+        <attr name="normal" format="reference"/>
+    </declare-styleable>
+
 </resources>
