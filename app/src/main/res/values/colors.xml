@@ -18,4 +18,20 @@
     <color name="presstrue">#EAEAEA</color>
     <color name="normalback">#FFFFFF</color>
     <color name="hintcolor">#707070</color>
+
+    <color name="chatui_bg_voice_call">#333333</color>
+    <color name="chatui_voice_call_hint_text">#D6D6D6</color>
+    <color name="chatui_voice_call_suggest_text">#DADADA</color>
+    <color name="chatui_voice_call_bg_suggest">#474747</color>
+    <color name="chatui_voice_call_house_title_text">#4A4E59</color>
+    <color name="chatui_voice_call_bg_consult_house">#03BF6D</color>
+    <color name="chatui_voice_call_bg_bias_text">#4A4E59</color>
+    <color name="chatui_voice_call_house_desc_text">#9297A6</color>
+    <color name="chatui_voice_call_house_type">#FF9D56</color>
+    <color name="chatui_voice_call_brand_type">#00DF80</color>
+    <color name="chatui_voice_call_sale_type">#8F85AD</color>
+    <color name="chatui_voice_call_house_price">#FF614C</color>
+    <color name="chatui_voice_call_small_window_text">#3171F6</color>
+
+
 </resources>

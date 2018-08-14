@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_margin="10dp"
+  android:background="@color/white">
+
+  <ImageView
+    android:id="@+id/iv_small_window"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:src="@mipmap/chatui_ic_small_window_waiting"/>
+  <TextView
+    android:id="@+id/tv_small_text"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textSize="12sp"
+    android:textColor="@color/chatui_voice_call_small_window_text"
+    android:layout_alignParentTop="true"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="60dp"
+    tools:text="等待接听"/>
+</RelativeLayout>

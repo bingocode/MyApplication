@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/chatui_bg_voice_call"
+  >
+  <LinearLayout
+    android:id="@+id/ll_smallest"
+    android:layout_width="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginStart="30dp"
+    android:layout_marginTop="30dp"
+    android:layout_height="wrap_content">
+    <ImageView
+      android:id="@+id/iv_smallest"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@mipmap/chatui_ic_smallest"/>
+    <TextView
+      android:id="@+id/tv_smallest"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textColor="@color/white"
+      android:textSize="12sp"
+      android:text="@string/chatui_voice_call_smallest"/>
+  </LinearLayout>
+
+
+  <!--房源卡片-->
+  <LinearLayout
+    android:id="@+id/chat_item_house_card"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:layout_below="@id/ll_smallest"
+    android:layout_marginTop="20dp"
+    android:layout_marginStart="20dp"
+    android:layout_centerHorizontal="true"
+    android:visibility="invisible"
+    android:orientation="vertical"
+    >
+    <include layout="@layout/chatui_voice_call_second_hand_house_card_content" />
+  </LinearLayout>
+
+  <LinearLayout
+    android:id="@+id/chat_item_house_report"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:layout_below="@id/chat_item_house_card"
+    android:layout_marginTop="12dp"
+    android:layout_centerHorizontal="true"
+    android:visibility="invisible"
+    android:orientation="vertical"
+    >
+    <include layout="@layout/chatui_voice_call_house_report_card" />
+  </LinearLayout>
+
+  <ImageView
+    android:id="@+id/iv_head"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="155dp"
+    android:layout_centerHorizontal="true"
+    android:visibility="invisible"
+    />
+
+  <TextView
+    android:id="@+id/tv_name"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="3dp"
+    android:textSize="32sp"
+    android:layout_below="@id/iv_head"
+    android:textColor="@color/white"
+    android:visibility="invisible"
+    />
+
+  <TextView
+    android:id="@+id/tv_hint"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="4dp"
+    android:textSize="16sp"
+    android:layout_below="@id/tv_name"
+    android:textColor="@color/chatui_voice_call_hint_text"
+    android:visibility="invisible"
+    tools:text="@string/chatui_voice_call_waiting_hint"/>
+
+
+  <LinearLayout
+    android:id="@+id/ll_center_icon"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_centerHorizontal="true"
+    android:layout_marginBottom="17dp"
+    android:orientation="vertical"
+    android:visibility="invisible"
+    android:gravity="center"
+    >
+    <ImageView
+      android:id="@+id/iv_center_icon"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@mipmap/chatui_ic_hang_up"/>
+
+    <TextView
+      android:id="@+id/tv_center_icon"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textColor="@color/chatui_voice_call_hint_text"
+      android:layout_marginTop="8dp"
+      android:textSize="12sp"
+      tools:text="@string/chatui_voice_call_hang_up"
+      />
+  </LinearLayout>
+
+  <TextView
+    android:id="@+id/tv_time"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="20dp"
+    android:textSize="14sp"
+    android:layout_above="@id/ll_center_icon"
+    android:textColor="@color/chatui_voice_call_hint_text"
+    android:visibility="invisible" />
+
+  <TextView
+    android:id="@+id/tv_time_text"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="4dp"
+    android:textSize="14sp"
+    android:layout_above="@id/tv_time"
+    android:textColor="@color/chatui_voice_call_hint_text"
+    android:visibility="invisible"
+    tools:text="通话时间"/>
+
+
+  <TextView
+    android:id="@+id/tv_suggest"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:layout_marginBottom="4dp"
+    android:textSize="14sp"
+    android:layout_above="@id/tv_time_text"
+    android:textColor="@color/chatui_voice_call_hint_text"
+    android:background="@color/chatui_voice_call_bg_suggest"
+    android:paddingLeft="14dp"
+    android:paddingRight="14dp"
+    android:paddingTop="3dp"
+    android:paddingBottom="3dp"
+    android:visibility="invisible"
+    tools:text="对方可能网络信号不良，建议切换电话拨号"
+    />
+
+
+
+  <LinearLayout
+    android:id="@+id/ll_left_icon"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentStart="true"
+    android:layout_marginStart="40dp"
+    android:layout_marginBottom="17dp"
+    android:orientation="vertical"
+    android:gravity="center"
+    >
+    <ImageView
+      android:id="@+id/iv_left_icon"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@mipmap/chatui_ic_switch_phone"/>
+    <TextView
+      android:id="@+id/tv_left_icon"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textColor="@color/chatui_voice_call_hint_text"
+      android:layout_marginTop="8dp"
+      android:textSize="12sp"
+      tools:text="切换为电话拨号"
+      />
+  </LinearLayout>
+
+  <LinearLayout
+    android:id="@+id/ll_right_icon"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentEnd="true"
+    android:layout_marginEnd="40dp"
+    android:layout_marginBottom="17dp"
+    android:orientation="vertical"
+    android:gravity="center"
+    >
+    <ImageView
+      android:id="@+id/iv_right_icon"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@mipmap/chatui_ic_handsfree"/>
+
+    <TextView
+      android:id="@+id/tv_right_icon"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textColor="@color/chatui_voice_call_hint_text"
+      android:layout_marginTop="8dp"
+      android:textSize="12sp"
+      tools:text="免提"
+      />
+  </LinearLayout>
+
+</RelativeLayout>

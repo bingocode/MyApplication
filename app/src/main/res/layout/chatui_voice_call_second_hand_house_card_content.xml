@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools">
+
+  <RelativeLayout
+    android:layout_width="335dp"
+    android:layout_height="wrap_content"
+    android:paddingBottom="15dp">
+
+    <TextView
+      android:id="@+id/tv_consult_house"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:ellipsize="end"
+      android:maxLines="1"
+      android:textSize="16sp"
+      android:paddingLeft="18dp"
+      android:paddingTop="14dp"
+      android:paddingBottom="14dp"
+      android:background="@color/chatui_voice_call_bg_consult_house"
+      android:textColor="@color/white"
+      android:text="咨询房源" />
+
+    <ImageView
+      android:id="@+id/iv_second_hand_house_image"
+      android:layout_width="100dp"
+      android:layout_height="80dp"
+      android:layout_marginTop="15dp"
+      android:layout_marginStart="18dp"
+      android:scaleType="centerCrop"
+      android:layout_below="@id/tv_consult_house"
+      android:layout_alignParentStart="true"
+      />
+
+   <RelativeLayout
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_below="@id/tv_consult_house"
+     android:paddingRight="20dp"
+     android:layout_marginTop="15dp"
+     android:layout_toRightOf="@id/iv_second_hand_house_image"
+     android:layout_marginStart="14dp">
+
+     <TextView
+       android:id="@+id/tv_house_source_title"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:ellipsize="end"
+       android:maxLines="2"
+       android:textSize="18sp"
+       android:textColor="@color/chatui_voice_call_house_title_text"
+       tools:text="上地东里小区" />
+
+     <TextView
+       android:id="@+id/tv_house_source_description"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:ellipsize="end"
+       android:maxLines="1"
+       android:textSize="12sp"
+       android:textColor="@color/chatui_voice_call_house_desc_text"
+       android:layout_below="@id/tv_house_source_title"
+       tools:text="4-2-2-2 · 145平 · 06/25 · 南北" />
+
+     <TextView
+       android:id="@+id/tv_house_type"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:ellipsize="end"
+       android:maxLines="1"
+       android:textColor="@color/chatui_voice_call_house_type"
+       android:textSize="11sp"
+       android:background="@drawable/chatui_bg_voice_call_house_type"
+       android:layout_below="@id/tv_house_source_description"
+       tools:text="学区房" />
+
+     <TextView
+       android:id="@+id/tv_brand_type"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:ellipsize="end"
+       android:maxLines="1"
+       android:layout_marginStart="5dp"
+       android:textColor="@color/chatui_voice_call_brand_type"
+       android:textSize="11sp"
+       android:layout_below="@id/tv_house_source_description"
+       android:background="@drawable/chatui_bg_voice_call_brand_type"
+       android:layout_toRightOf="@id/tv_house_type"
+       tools:text="掌上链家" />
+
+     <TextView
+       android:id="@+id/tv_sale_type"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:ellipsize="end"
+       android:maxLines="1"
+       android:layout_marginStart="5dp"
+       android:textColor="@color/chatui_voice_call_sale_type"
+       android:textSize="11sp"
+       android:layout_below="@id/tv_house_source_description"
+       android:background="@drawable/chatui_bg_voice_call_sale_type"
+       android:layout_toRightOf="@id/tv_brand_type"
+       tools:text="租售" />
+
+     <TextView
+       android:id="@+id/tv_house_source_price_tag"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_below="@id/tv_house_type"
+       android:textSize="15sp"
+       android:textColor="@color/chatui_voice_call_house_price"
+       tools:text="3452万" />
+
+   </RelativeLayout>
+  </RelativeLayout>
+</merge>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools">
+<LinearLayout
+  android:layout_width="335dp"
+  android:layout_height="wrap_content"
+  android:paddingBottom="15dp"
+  android:orientation="vertical"
+ >
+  <TextView
+    android:id="@+id/tv_consult_house"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:ellipsize="end"
+    android:maxLines="1"
+    android:textSize="16sp"
+    android:paddingStart="18dp"
+    android:paddingTop="14dp"
+    android:paddingBottom="14dp"
+    android:background="@color/chatui_voice_call_bg_consult_house"
+    android:textColor="@color/white"
+    tools:text="客户看房报告"
+    />
+
+  <TextView
+    android:id="@+id/tv_price_bias"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="18dp"
+    android:layout_marginTop="14dp"
+    android:ellipsize="end"
+    android:maxLines="1"
+    android:textColor="@color/chatui_voice_call_bg_bias_text"
+    android:textSize="14sp"
+    tools:text="价格偏好:300-400万" />
+
+  <TextView
+    android:id="@+id/tv_home_bias"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:ellipsize="end"
+    android:maxLines="1"
+    android:textSize="14sp"
+    android:layout_marginStart="18dp"
+    android:paddingTop="1dp"
+    android:textColor="@color/chatui_voice_call_bg_bias_text"
+    tools:text="居室偏好：3居室"
+    />
+
+  <TextView
+    android:id="@+id/tv_business_bias"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:ellipsize="end"
+    android:maxLines="1"
+    android:textSize="14sp"
+    android:layout_marginStart="18dp"
+    android:paddingTop="1dp"
+    android:textColor="@color/chatui_voice_call_bg_bias_text"
+    tools:text="商圈偏好：中关村"
+    />
+
+
+</LinearLayout>
+</merge>
