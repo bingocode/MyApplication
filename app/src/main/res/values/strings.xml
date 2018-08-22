@@ -49,8 +49,10 @@
   <string name="chatui_voice_call_answer">接听</string>
   <string name="chatui_voice_call_waiting_answer">等待接听</string>
   <string name="chatui_voice_call_over">通话结束</string>
+  <string name="chatui_voice_call_time">正在通话</string>
   <string name="chatui_voice_call_apply_permission">权限申请</string>
   <string name="chatui_voice_call_need_float_permission">需要取得权限以使用悬浮窗</string>
+  <string name="chatui_voice_call_network_mobile">通话会产生手机流量</string>
 
 
 </resources>

@@ -16,8 +16,10 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.admin.fisrtdemo.R;
+import com.example.admin.fisrtdemo.event.ShowLargeEvent;
 import com.example.admin.fisrtdemo.voicecall.TimeCountHelper;
 import com.example.admin.fisrtdemo.voicecall.VoiceCallActivity;
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * 创建时间: 2018/08/08 10:11 <br>
@@ -165,9 +167,9 @@ public class FloatWindowManager {
         finalX = params.x;
         finalY = params.y;
         if(isclick) {
-          Log.i(TAG, "add view");
           FloatWindowManager.hideFloatWindow();
-          mContext.startActivity(new Intent(mContext, VoiceCallActivity.class));
+          //mContext.startActivity(new Intent(mContext, VoiceCallActivity.class));
+          EventBus.getDefault().post(new ShowLargeEvent());
         }
       }
 

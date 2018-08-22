@@ -102,7 +102,6 @@ public class CallAudioController implements SensorEventListener {
 
   private synchronized void setSpeakerphoneOn(boolean on) {
     Log.i(TAG, "setSpeakerphoneOn:" + on);
-    //AudioMsgHelper.sIsEarpieceMode = !on;
     mAudioManager.setSpeakerphoneOn(on);
     if (on) {
       mAudioManager.setMode(AudioManager.MODE_NORMAL);

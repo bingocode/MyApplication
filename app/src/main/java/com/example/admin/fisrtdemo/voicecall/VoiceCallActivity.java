@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -15,19 +16,27 @@ import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.annotation.IntDef;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.example.admin.fisrtdemo.R;
+import com.example.admin.fisrtdemo.event.NetWorkEvent;
+import com.example.admin.fisrtdemo.event.PermissionEvent;
+import com.example.admin.fisrtdemo.event.ShowLargeEvent;
 import com.example.admin.fisrtdemo.service.FloatWindowService;
 import com.example.admin.fisrtdemo.utils.FloatWindowManager;
 import com.whu.zengbin.mutiview.LogUtil;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
-public class VoiceCallActivity extends BaseCallActivity implements TimeCountHelper.ITimeUpdate {
+public class VoiceCallActivity extends BaseCallActivity implements TimeCountHelper.ITimeUpdate, TelPhoneReceiver.PhoneStateCallBack {
   private static final String TAG = "VoiceCallActivity";
   private static final int REQUEST_CODE = 10001;
   public static final String CALL_TYPE_CODE = "voice_call_type";
@@ -53,6 +62,19 @@ public class VoiceCallActivity extends BaseCallActivity implements TimeCountHelp
     mTime.setText(timeStr);
     mtimeHandler.postDelayed(mTimerRunnable, 1000);
     FloatWindowManager.setTimetv(timeStr);
+  }
+
+  @Override public void onIdle() {
+    Toast.makeText(this, "空闲中：CALL_STATE_IDLE", Toast.LENGTH_SHORT).show();
+
+  }
+
+  @Override public void onRing() {
+    Toast.makeText(this, "响铃中：CALL_STATE_RINGING", Toast.LENGTH_SHORT).show();
+  }
+
+  @Override public void onOffhook() {
+    Toast.makeText(this, "通话中：CALL_STATE_OFFHOOK", Toast.LENGTH_SHORT).show();
   }
 
   @Retention(RetentionPolicy.SOURCE) @IntDef({
@@ -123,16 +145,37 @@ public class VoiceCallActivity extends BaseCallActivity implements TimeCountHelp
   private CallAudioController mCallAudioController;
   private boolean isCasedByWakeLock = false;
 
+  private IntentFilter intentFilter;
+  private NetworkChangeReceiver networkChangeReceiver;
+  private TelPhoneReceiver mTelListener;
+
+
+
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.chatui_activity_voice_call);
     Intent intent = getIntent();
     mCallType = intent.getIntExtra(CALL_TYPE_CODE,ZHANGLIANE_CALL);
+    EventBus.getDefault().register(this);
+
     mServiceIntent = new Intent(this, FloatWindowService.class);
     mTimerRunnable = TimeCountHelper.getInstance();
     mTimerRunnable.setTimeUpdate(this);
     initView();
     mCallAudioController = new CallAudioController(this);
+
+    intentFilter = new IntentFilter();
+    intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+    intentFilter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
+    intentFilter.addAction("android.net.wifi.STATE_CHANGE");
+    networkChangeReceiver = new NetworkChangeReceiver();
+    registerReceiver(networkChangeReceiver, intentFilter);
+    mTelListener = new TelPhoneReceiver(this,this);
+    IntentFilter filter=new IntentFilter();
+    filter.addAction("android.intent.action.PHONE_STATE");
+    filter.addAction("android.intent.action.NEW_OUTGOING_CALL");
+    registerReceiver(mTelListener, filter);
+
     setCallViewState(WAITING_CALL_VIEW_STATE);
   }
 
@@ -187,6 +230,11 @@ public class VoiceCallActivity extends BaseCallActivity implements TimeCountHelp
     LogUtil.i(TAG, "onDestroy");
     mtimeHandler.removeCallbacks(mTimerRunnable);
     mCallAudioController.destroy();
+    unregisterReceiver(networkChangeReceiver);
+    mTelListener.destory();
+    unregisterReceiver(mTelListener);
+    mTelListener = null;
+    EventBus.getDefault().unregister(this);
     super.onDestroy();
 
   }
@@ -235,6 +283,30 @@ public class VoiceCallActivity extends BaseCallActivity implements TimeCountHelp
     mRightIconImg = (ImageView) findViewById(R.id.iv_right_icon);
     mRightIconTv = (TextView) findViewById(R.id.tv_right_icon);
 
+    ImageView mHouseImg = ViewHelper.findView(mHouseCard,R.id.iv_second_hand_house_image);
+    TextView mHouseTitle = ViewHelper.findView(mHouseCard,R.id.tv_house_source_title);
+    TextView mHouseDesc = ViewHelper.findView(mHouseCard,R.id.tv_house_source_description);
+    TextView mHouseType = ViewHelper.findView(mHouseCard,R.id.tv_house_type);
+    TextView mBrandType = ViewHelper.findView(mHouseCard,R.id.tv_brand_type);
+    TextView mSaleType = ViewHelper.findView(mHouseCard,R.id.tv_sale_type);
+    TextView mPirce = ViewHelper.findView(mHouseCard,R.id.tv_house_source_price_tag);
+
+    TextView mPriceBias = ViewHelper.findView(mHouseReport,R.id.tv_price_bias);
+    TextView mHomeBias = ViewHelper.findView(mHouseReport,R.id.tv_home_bias);
+    TextView mBussinessBias = ViewHelper.findView(mHouseReport,R.id.tv_business_bias);
+
+    mHouseImg.setImageResource(R.drawable.hource_handle);
+    mHouseTitle.setText("上地东里小区");
+    mHouseDesc.setText("4-2-2-2 · 145平 · 06/25 · 南北");
+    mHouseType.setText("学区房");
+    mBrandType.setText("掌上链家");
+    mSaleType.setText("租售");
+    mPirce.setText("3452万");
+
+    mPriceBias.setText("价格偏好：300-400万");
+    mHomeBias.setText("居室偏好：3居室");
+    mBussinessBias.setText("商圈偏好：中关村");
+
     mSmallest.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         checkPermissionAndSmall();
@@ -255,6 +327,7 @@ public class VoiceCallActivity extends BaseCallActivity implements TimeCountHelp
     switch (mCallType) {
       case ZHANGLIANE_CALL:
         mHeadImg.setVisibility(View.VISIBLE);
+        mHeadImg.setImageResource(R.mipmap.chatui_img_default_avatar);
         mName.setVisibility(View.VISIBLE);
         mHint.setVisibility(View.VISIBLE);
         mHint.setText(R.string.chatui_voice_call_waiting_hint);
@@ -305,6 +378,8 @@ public class VoiceCallActivity extends BaseCallActivity implements TimeCountHelp
         mVibrator.vibrate(patter,0);
         mHouseCard.setVisibility(View.VISIBLE);
         mHouseReport.setVisibility(View.VISIBLE);
+        mTimetext.setVisibility(View.VISIBLE);
+        mTimetext.setText("连接中");
 
         mLeftIconImg.setImageResource(R.mipmap.chatui_ic_hang_up);
         mLeftIconTv.setText(R.string.chatui_voice_call_hang_up);
@@ -335,7 +410,6 @@ public class VoiceCallActivity extends BaseCallActivity implements TimeCountHelp
     stopRing();
     switch (mCallType) {
       case ZHANGLIANE_CALL:
-        showSwitchPhoneSuggest(true);
         mTimetext.setVisibility(View.VISIBLE);
         mTime.setVisibility(View.VISIBLE);
 
@@ -383,6 +457,7 @@ public class VoiceCallActivity extends BaseCallActivity implements TimeCountHelp
       case LINK_CALL:
         mVibrator.cancel();
         mTimetext.setVisibility(View.VISIBLE);
+        mTimetext.setText("正在通话");
         mTime.setVisibility(View.VISIBLE);
 
         mLeftIcon.setOnClickListener(new View.OnClickListener() {
@@ -455,12 +530,10 @@ public class VoiceCallActivity extends BaseCallActivity implements TimeCountHelp
   }
 
   @Override public void exitCallView() {
-    if (mCallViewState == WAITING_CALL_VIEW_STATE) {
       stopRing();
       if (mCallType == LINK_CALL) {
         mVibrator.cancel();
       }
-    }
     if(mTimerRunnable.isCounting()) {
       mTimerRunnable.exitTime();
     }
@@ -508,6 +581,7 @@ public class VoiceCallActivity extends BaseCallActivity implements TimeCountHelp
             })
             .create();
         dialog.show();
+        EventBus.getDefault().post(new PermissionEvent("need floatWindow Permission"));
       } else {
         mPresenter.smallestCall();
       }
@@ -524,6 +598,7 @@ public class VoiceCallActivity extends BaseCallActivity implements TimeCountHelp
       mMediaPlayer.setLooping(true);
       mMediaPlayer.prepare() ;
       mMediaPlayer.start();
+      fd.close();
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -531,9 +606,14 @@ public class VoiceCallActivity extends BaseCallActivity implements TimeCountHelp
 
   private void stopRing(){
     if (mMediaPlayer!=null){
-      if (mMediaPlayer.isPlaying()){
-        mMediaPlayer.stop();
-        mMediaPlayer.release();
+      try {
+        if (mMediaPlayer.isPlaying()){
+          mMediaPlayer.stop();
+          mMediaPlayer.release();
+        }
+      } catch (IllegalStateException e) {
+        Log.e(TAG,"stop Ring:" + e);
+        mMediaPlayer = null;
       }
     }
   }
@@ -546,10 +626,10 @@ public class VoiceCallActivity extends BaseCallActivity implements TimeCountHelp
     startActivity(intent);
   }
 
-  private void showSwitchPhoneSuggest(boolean isShow) {
-    if(isShow) {
+  private void showSwitchPhoneSuggest(String suggestText) {
+    if(!TextUtils.isEmpty(suggestText)) {
       mSuggest.setVisibility(View.VISIBLE);
-      mSuggest.setText(R.string.chatui_voice_call_net_problem_suggest);
+      mSuggest.setText(suggestText);
     } else {
       mSuggest.setVisibility(View.INVISIBLE);
     }
@@ -566,4 +646,14 @@ public class VoiceCallActivity extends BaseCallActivity implements TimeCountHelp
     }
   }
 
+  @Subscribe(threadMode = ThreadMode.MAIN)
+  public void onNetWorkConditionEvent(NetWorkEvent event) {
+     showSwitchPhoneSuggest(event.networksuggest);
   }
+
+  @Subscribe(threadMode = ThreadMode.MAIN)
+  public void onShowLargeEvent(ShowLargeEvent event) {
+    moveTaskToBack(false);
+  }
+
+}

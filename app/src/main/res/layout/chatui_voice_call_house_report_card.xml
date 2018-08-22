@@ -19,7 +19,7 @@
     android:paddingBottom="14dp"
     android:background="@color/chatui_voice_call_bg_consult_house"
     android:textColor="@color/white"
-    tools:text="客户看房报告"
+    android:text="客户看房报告"
     />
 
   <TextView
