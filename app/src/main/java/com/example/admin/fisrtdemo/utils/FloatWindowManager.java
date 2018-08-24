@@ -2,6 +2,7 @@ package com.example.admin.fisrtdemo.utils;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
@@ -51,7 +52,8 @@ public class FloatWindowManager {
   /**
    * 显示弹出框
    */
-  public static void showFloatWindow(final Context context, int resId,@VoiceCallActivity.CALL_VIEW_STATE int state) {
+  public static void showFloatWindow(final Activity context, int resId,@VoiceCallActivity.CALL_VIEW_STATE int state) {
+    Log.i(TAG, "keep sc on");
     if (isShown) {
       Log.i(TAG, "return cause already shown");
       return;
@@ -139,6 +141,7 @@ public class FloatWindowManager {
       }
 
     });
+
   }
 
   public static void setTimetv(String timeStr) {
@@ -168,8 +171,8 @@ public class FloatWindowManager {
         finalY = params.y;
         if(isclick) {
           FloatWindowManager.hideFloatWindow();
-          //mContext.startActivity(new Intent(mContext, VoiceCallActivity.class));
-          EventBus.getDefault().post(new ShowLargeEvent());
+          mContext.startActivity(new Intent(mContext, VoiceCallActivity.class));
+          //EventBus.getDefault().post(new ShowLargeEvent());
         }
       }
 

@@ -23,7 +23,6 @@ android {
     cruncherEnabled = false
 
     useNewCruncher = false
-
   }
 }
 

@@ -1,6 +1,7 @@
 package com.example.admin.fisrtdemo.voicecall;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,6 +20,7 @@ import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,11 +29,11 @@ import com.example.admin.fisrtdemo.R;
 import com.example.admin.fisrtdemo.event.NetWorkEvent;
 import com.example.admin.fisrtdemo.event.PermissionEvent;
 import com.example.admin.fisrtdemo.event.ShowLargeEvent;
-import com.example.admin.fisrtdemo.service.FloatWindowService;
 import com.example.admin.fisrtdemo.utils.FloatWindowManager;
 import com.whu.zengbin.mutiview.LogUtil;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.List;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -41,6 +43,7 @@ public class VoiceCallActivity extends BaseCallActivity implements TimeCountHelp
   private static final int REQUEST_CODE = 10001;
   public static final String CALL_TYPE_CODE = "voice_call_type";
   public static final String CALL_VIEW_STATE_CODE = "voice_call_state";
+  private boolean isCheckingPermission = false;
 
   /**
    * 掌链通话界面
@@ -131,7 +134,6 @@ public class VoiceCallActivity extends BaseCallActivity implements TimeCountHelp
 
   //判断是否是挂断关闭通话
   private boolean isExit = false;
-  private Intent mServiceIntent;
   int mCallType;
 
   private String mPhNumber = "10086";
@@ -148,17 +150,19 @@ public class VoiceCallActivity extends BaseCallActivity implements TimeCountHelp
   private IntentFilter intentFilter;
   private NetworkChangeReceiver networkChangeReceiver;
   private TelPhoneReceiver mTelListener;
+  private HomeListener homeListener;
 
 
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
+        WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     setContentView(R.layout.chatui_activity_voice_call);
     Intent intent = getIntent();
     mCallType = intent.getIntExtra(CALL_TYPE_CODE,ZHANGLIANE_CALL);
     EventBus.getDefault().register(this);
 
-    mServiceIntent = new Intent(this, FloatWindowService.class);
     mTimerRunnable = TimeCountHelper.getInstance();
     mTimerRunnable.setTimeUpdate(this);
     initView();
@@ -198,6 +202,24 @@ public class VoiceCallActivity extends BaseCallActivity implements TimeCountHelp
     }
     LogUtil.i(TAG, "onResume");
     mCallAudioController.register();
+    homeListener = new HomeListener(this);
+    homeListener.setOnHomePressedListener(new HomeListener.OnHomePressedListener() {
+      @Override
+      public void onHomePressed() {
+        //处理按了home后的事
+        Log.e("tag==","Home键");
+        Toast.makeText(VoiceCallActivity.this, "Home键", Toast.LENGTH_SHORT).show();
+      }
+
+      @Override
+      public void onHomeLongPressed() {
+        //处理按了任务键后的事
+        Log.e("tag==","任务切换键");
+        Toast.makeText(VoiceCallActivity.this, "任务切换键", Toast.LENGTH_SHORT).show();
+      }
+    });
+    homeListener.startWatch();//注册广播
+    super.onResume();
   }
 
   @Override protected void onPause() {
@@ -213,6 +235,7 @@ public class VoiceCallActivity extends BaseCallActivity implements TimeCountHelp
   }
 
   @Override protected void onStop() {
+    homeListener.stopWatch();//注销广播
     if (isCasedByWakeLock) {
       LogUtil.i(TAG, "onStop1");
       super.onStop();
@@ -220,15 +243,14 @@ public class VoiceCallActivity extends BaseCallActivity implements TimeCountHelp
     }
     LogUtil.i(TAG, "onStop");
     if(!isExit) {
-      mServiceIntent.putExtra(CALL_VIEW_STATE_CODE,mCallViewState);
-      startService(mServiceIntent);
+      FloatWindowManager.showFloatWindow(VoiceCallActivity.this, R.layout.chatui_item_tel_small,mCallViewState);
     }
     super.onStop();
   }
 
   @Override protected void onDestroy() {
     LogUtil.i(TAG, "onDestroy");
-    mtimeHandler.removeCallbacks(mTimerRunnable);
+    mtimeHandler.removeCallbacksAndMessages(null);
     mCallAudioController.destroy();
     unregisterReceiver(networkChangeReceiver);
     mTelListener.destory();
@@ -249,6 +271,7 @@ public class VoiceCallActivity extends BaseCallActivity implements TimeCountHelp
       if (Build.VERSION.SDK_INT >= 23) {
         if (Settings.canDrawOverlays(this)) {
           Log.i(TAG, "onActivityResult granted");
+          isCheckingPermission = false;
           mPresenter.smallestCall();
         }
       }
@@ -538,7 +561,7 @@ public class VoiceCallActivity extends BaseCallActivity implements TimeCountHelp
       mTimerRunnable.exitTime();
     }
     isExit = true;
-    stopService(mServiceIntent);
+    FloatWindowManager.hideFloatWindow();
     finish();
   }
 
@@ -560,6 +583,7 @@ public class VoiceCallActivity extends BaseCallActivity implements TimeCountHelp
         break;
     }
   }
+
 
   private void checkPermissionAndSmall() {
     if (Build.VERSION.SDK_INT >= 23) {

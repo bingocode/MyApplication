@@ -39,7 +39,6 @@
   <string name="chatui_group_detail_ok_btn">确定</string>
 
 
-
   <string name="chatui_voice_call_smallest">最小化</string>
   <string name="chatui_voice_call_waiting_hint">正在等待对方接受邀请…</string>
   <string name="chatui_voice_call_net_problem_suggest">对方可能网络信号不良，建议切换电话拨号</string>

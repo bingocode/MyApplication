@@ -8,6 +8,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
+import com.example.admin.fisrtdemo.voicecall.MyService
 import com.example.admin.fisrtdemo.voicecall.VoiceCallActivity
 import com.example.admin.fisrtdemo.voicecall.VoiceCallActivity.BEIKE_CALL
 import com.example.admin.fisrtdemo.voicecall.VoiceCallActivity.CALL_TYPE_CODE
@@ -44,6 +45,8 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 //                //                ActivityCollector.finishAll();
 //                //                android.os.Process.killProcess(android.os.Process.myPid());
 //                MyListviewActivity.start(this@MainActivity)
+//            button3 ->
+//                startService(Intent(this@MainActivity, MyService::class.java)) //启动后台服务
             button4 ->
                // startActivity(Intent(this@MainActivity, ThirdActivity::class.java))
                 mIntent.putExtra(CALL_TYPE_CODE,ZHANGLIANE_CALL)
@@ -51,8 +54,8 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                 //startActivity(Intent(this@MainActivity,CustomViewActivity::class.java))
                 mIntent.putExtra(CALL_TYPE_CODE,BEIKE_CALL)
             button6 ->
-                //startActivity(Intent(this@MainActivity, VoiceCallActivity::class.java))
-                mIntent.putExtra(CALL_TYPE_CODE,LINK_CALL)
+                {mIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+                mIntent.putExtra(CALL_TYPE_CODE,LINK_CALL)}
             else -> {
             }
         }
