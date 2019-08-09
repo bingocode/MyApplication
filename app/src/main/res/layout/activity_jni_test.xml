@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  android:gravity="center_horizontal"
+  tools:context=".jnitest.JniTestActivity">
+<TextView
+  android:id="@+id/showTv"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:gravity="center_horizontal"
+  android:text="从Native获取的文本"/>
+
+  <Button
+    android:id="@+id/getBtn"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="获取静态注册String"
+    />
+  <Button
+    android:id="@+id/getBtn2"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="获取动态注册String"
+    />
+  <Button
+    android:id="@+id/getBtn3"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="加法"
+    />
+  <Button
+    android:id="@+id/getBtn4"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="减法"
+    />
+  <Button
+    android:id="@+id/getBtn5"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="乘法"
+    />
+  <Button
+    android:id="@+id/getBtn6"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="除法"
+    />
+</LinearLayout>

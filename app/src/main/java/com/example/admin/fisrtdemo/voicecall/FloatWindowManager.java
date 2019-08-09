@@ -1,45 +1,34 @@
-package com.example.admin.fisrtdemo.utils;
+package com.example.admin.fisrtdemo.voicecall;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.os.Build;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.WindowManager.LayoutParams;
-
-import android.widget.ImageView;
-import android.widget.TextView;
-import com.example.admin.fisrtdemo.R;
-import com.example.admin.fisrtdemo.event.ShowLargeEvent;
-import com.example.admin.fisrtdemo.voicecall.TimeCountHelper;
-import com.example.admin.fisrtdemo.voicecall.VoiceCallActivity;
-import org.greenrobot.eventbus.EventBus;
 
 /**
- * 创建时间: 2018/08/08 10:11 <br>
+ * 创建时间: 2019/08/05 19:47 <br>
  * 作者: zengbin <br>
- * 描述:悬浮窗管理类
+ * 描述:
  */
 public class FloatWindowManager {
   private static final String TAG = "FloatWindowManager";
   private static View mView = null;
-  private static TextView mTimetv;
   private static WindowManager mWindowManager = null;
   private static Context mContext = null;
   public static Boolean isShown = false;
   private static WindowManager.LayoutParams params;
-  private static ValueAnimator anim;
 
   static int sPhoneWidth;
   static int sPhoneHeight;
-  
+
   /**
    * 移动的位置
    */
@@ -53,14 +42,13 @@ public class FloatWindowManager {
   /**
    * 显示弹出框
    */
-  public static void showFloatWindow(final Activity context, int resId,@VoiceCallActivity.CALL_VIEW_STATE int state) {
-    Log.i(TAG, "keep sc on");
+  public static void showFloatWindow(final Context context, int resId) {
     if (isShown) {
       Log.i(TAG, "return cause already shown");
       return;
     }
     isShown = true;
-    Log.i(TAG, "showFloatWindow");
+    Log.i(TAG, "showFloatWindow1");
     // 获取应用的Context
     mContext = context.getApplicationContext();
     // 获取WindowManager
@@ -70,20 +58,23 @@ public class FloatWindowManager {
     sPhoneWidth = mWindowManager.getDefaultDisplay().getWidth();
     sPhoneHeight = mWindowManager.getDefaultDisplay().getHeight();
 
-    mView = setUpView(context,resId);
-    mTimetv = (TextView) mView.findViewById(R.id.tv_small_text);
-    if (state == VoiceCallActivity.WAITING_CALL_VIEW_STATE) {
-      ((ImageView) mView.findViewById(R.id.iv_small_window)).setImageResource(R.mipmap.chatui_ic_small_window_waiting);
-      mTimetv.setText(R.string.chatui_voice_call_waiting_answer);
-    } else {
-      ((ImageView)mView.findViewById(R.id.iv_small_window)).setImageResource(R.mipmap.chatui_ic_small_window_calling);
-      mTimetv.setText(TimeCountHelper.getFormatHMS(TimeCountHelper.getInstance().time));
-    }
+    mView = setUpView(mContext, resId);
     params = new WindowManager.LayoutParams();
     // 类型
-    params.type = LayoutParams.TYPE_SYSTEM_ALERT;
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      params.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+    } else {
+      params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+    }
     // 设置flag
-    params.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
+    params.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+        | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
+
+    /*
+       params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+        | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR
+        | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+     */
     // FLAG_NOT_FOCUSABLE 悬浮窗口较小时，后面的应用图标由不可长按变为可长按
     // FLAG_NOT_TOUCH_MODAL 不阻塞事件传递到后面的窗口
 
@@ -99,9 +90,11 @@ public class FloatWindowManager {
     params.gravity = Gravity.TOP | Gravity.END;
     mWindowManager.addView(mView, params);
 
-
     mView.setOnTouchListener(new View.OnTouchListener() {
       @Override public boolean onTouch(View v, MotionEvent event) {
+        if (mView == null) {
+          return true;
+        }
         switch (event.getAction()) {
           case MotionEvent.ACTION_DOWN:// 按下 事件
             startX = lastX = (int) event.getRawX();
@@ -112,15 +105,15 @@ public class FloatWindowManager {
             params.y = params.y + (int) (event.getRawY() - lastY);
 
             //边界设置(自动靠边)
-            if(params.x <=0) {
-              params.x =0;
+            if (params.x <= 0) {
+              params.x = 0;
             } else if (params.x > sPhoneWidth - mView.getWidth()) {
-              params.x = sPhoneWidth -mView.getWidth();
+              params.x = sPhoneWidth - mView.getWidth();
             }
-            if(params.y <=0) {
-              params.y =0;
+            if (params.y <= 0) {
+              params.y = 0;
             } else if (params.y > sPhoneHeight - mView.getHeight()) {
-              params.y = sPhoneHeight -mView.getHeight();
+              params.y = sPhoneHeight - mView.getHeight();
             }
             mWindowManager.updateViewLayout(v, params);
             lastX = (int) event.getRawX();
@@ -128,60 +121,60 @@ public class FloatWindowManager {
             break;
           case MotionEvent.ACTION_UP:
             //处理点击
-            boolean isclick = Math.abs((int) event.getRawX() - startX) < 20 && Math.abs((int) event.getRawY() - startY) < 20;
-            if (params.x > sPhoneWidth / 2- v.getWidth()/2) {
+            boolean isclick = Math.abs((int) event.getRawX() - startX) < 20
+                && Math.abs((int) event.getRawY() - startY) < 20;
+            if (params.x > sPhoneWidth / 2 - v.getWidth() / 2) {
               //放手后移到左边
-              moveAnim( params.x, sPhoneWidth - v.getWidth(), isclick);
+              moveAnim(params.x, sPhoneWidth - v.getWidth(), isclick);
             } else {
               //移到右边
-              moveAnim( params.x, 0, isclick);
+              moveAnim(params.x, 0, isclick);
             }
             break;
         }
         return true;
       }
-
     });
-
   }
 
-  public static void setTimetv(String timeStr) {
-    if(isShown && mView != null && mTimetv !=null){
-      mTimetv.setText(timeStr);
-    }
-  }
-
-  private static void moveAnim( int oldX, int newX, final boolean isclick) {
-    anim = ValueAnimator.ofInt(oldX,  newX);
+  private static void moveAnim(int oldX, int newX, final boolean isclick) {
+    ValueAnimator anim = ValueAnimator.ofInt(oldX, newX);
     anim.setDuration(200);
     anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
       @Override
       public void onAnimationUpdate(ValueAnimator animation) {
         //设置坐标
-          params.x = (int) animation.getAnimatedValue();
-        mWindowManager.updateViewLayout(mView, params);
+        params.x = (int) animation.getAnimatedValue();
+        if (isShown && mView != null) {
+          mWindowManager.updateViewLayout(mView, params);
+        }
       }
     });
     anim.addListener(new Animator.AnimatorListener() {
       @Override
-      public void onAnimationStart(Animator animator) {}
+      public void onAnimationStart(Animator animator) {
+      }
 
       @Override
       public void onAnimationEnd(Animator animator) {
         finalX = params.x;
         finalY = params.y;
-        if(isclick) {
+        if (isclick) {
+          Log.i(TAG, "closeFloatWindow, show CallActivity");
           FloatWindowManager.hideFloatWindow();
-          mContext.startActivity(new Intent(mContext, VoiceCallActivity.class));
-          //EventBus.getDefault().post(new ShowLargeEvent());
+          Intent intent = new Intent(mContext, VoipActivity.class);
+          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+          mContext.startActivity(intent);
         }
       }
 
       @Override
-      public void onAnimationCancel(Animator animator) {}
+      public void onAnimationCancel(Animator animator) {
+      }
 
       @Override
-      public void onAnimationRepeat(Animator animator) {}
+      public void onAnimationRepeat(Animator animator) {
+      }
     });
     anim.start();
   }
@@ -190,23 +183,18 @@ public class FloatWindowManager {
    * 隐藏弹出框
    */
   public static void hideFloatWindow() {
-    Log.i(TAG, "hide " + isShown + ", " + mView);
-    if (isShown &&  mView != null) {
+    if (isShown && mView != null) {
       Log.i(TAG, "hideFloatWindow");
       mWindowManager.removeView(mView);
       mView = null;
-      mTimetv = null;
       isShown = false;
     }
   }
 
-  private static View setUpView(final Context context,int resId) {
-    Log.i(TAG, "setUp view");
+  private static View setUpView(final Context context, int resId) {
     View view = LayoutInflater.from(context).inflate(resId,
         null);
     return view;
   }
-
-
 }
 

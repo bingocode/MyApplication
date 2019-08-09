@@ -11,11 +11,8 @@
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-  <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
-
-  <!-- 解锁屏幕需要的权限 -->
-  <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
-  <!-- 申请电源锁需要的权限 -->
+  <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" /> <!-- 解锁屏幕需要的权限 -->
+  <uses-permission android:name="android.permission.DISABLE_KEYGUARD" /> <!-- 申请电源锁需要的权限 -->
   <uses-permission android:name="android.permission.WAKE_LOCK" />
 
   <application
@@ -25,6 +22,11 @@
     android:roundIcon="@mipmap/ic_launcher_round"
     android:supportsRtl="true"
     android:theme="@style/AppTheme">
+    <activity android:name=".voicecall.VoipActivity"
+      android:excludeFromRecents="true"
+      android:launchMode="singleInstance"
+      android:screenOrientation="portrait"></activity>
+    <activity android:name=".jnitest.JniTestActivity" />
     <activity
       android:name=".MainActivity"
       android:label="HOME"
@@ -60,13 +62,13 @@
     <activity
       android:name=".voicecall.VoiceCallActivity"
       android:excludeFromRecents="true"
-      android:launchMode="singleInstance"/>
+      android:launchMode="singleInstance" />
+    <activity
+      android:name=".voicecall.MessageActivity"
+      android:launchMode="singleInstance" />
 
-
-    <activity android:name=".voicecall.MessageActivity"
-      android:launchMode="singleInstance"
-      />
-    <service android:name=".voicecall.MyService"
+    <service
+      android:name=".voicecall.MyService"
       android:enabled="true"
       android:exported="true" />
   </application>

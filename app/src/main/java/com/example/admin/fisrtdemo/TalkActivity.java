@@ -1,12 +1,10 @@
 package com.example.admin.fisrtdemo;
 
 import android.graphics.drawable.AnimationDrawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
-import com.example.admin.fisrtdemo.utils.FloatWindowManager;
-import com.whu.zengbin.mutiview.LogUtil;
+import com.whu.zengbin.mutiview.util.LogUtil;
 
 public class TalkActivity extends AppCompatActivity {
   private static final String TAG = "TalkActivity";

@@ -29,11 +29,11 @@ import com.example.admin.fisrtdemo.R;
 import com.example.admin.fisrtdemo.event.NetWorkEvent;
 import com.example.admin.fisrtdemo.event.PermissionEvent;
 import com.example.admin.fisrtdemo.event.ShowLargeEvent;
+import com.example.admin.fisrtdemo.utils.CommonUtil;
 import com.example.admin.fisrtdemo.utils.FloatWindowManager;
-import com.whu.zengbin.mutiview.LogUtil;
+import com.whu.zengbin.mutiview.util.LogUtil;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.List;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -181,6 +181,23 @@ public class VoiceCallActivity extends BaseCallActivity implements TimeCountHelp
     registerReceiver(mTelListener, filter);
 
     setCallViewState(WAITING_CALL_VIEW_STATE);
+    if (CommonUtil.isNotifyEnable(this)) {
+      Toast.makeText(this, "打开通话界面", Toast.LENGTH_SHORT).show();
+    } else {
+      Toast.makeText(this, "无通知栏权限", Toast.LENGTH_SHORT).show();
+      final AlertDialog dialog = new AlertDialog.Builder(this)
+          .setTitle("权限申请")
+          .setMessage("去授权通知栏权限")
+          .setPositiveButton(getString(R.string.chatui_group_detail_ok_btn), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+              dialog.dismiss();
+              CommonUtil.goSystemSetting(VoiceCallActivity.this,Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            }
+          })
+          .create();
+      dialog.show();
+    }
   }
 
   @Override protected void onStart() {
@@ -597,7 +614,6 @@ public class VoiceCallActivity extends BaseCallActivity implements TimeCountHelp
               @Override
               public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                VoiceCallActivity.this.startActivity(intent);
                 intent.setData(Uri.parse("package:" + getPackageName()));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivityForResult(intent, REQUEST_CODE);
