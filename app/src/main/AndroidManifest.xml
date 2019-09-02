@@ -22,10 +22,12 @@
     android:roundIcon="@mipmap/ic_launcher_round"
     android:supportsRtl="true"
     android:theme="@style/AppTheme">
-    <activity android:name=".voicecall.VoipActivity"
+    <activity android:name=".page.PageActivity"></activity>
+    <activity
+      android:name=".voicecall.VoipActivity"
       android:excludeFromRecents="true"
       android:launchMode="singleInstance"
-      android:screenOrientation="portrait"></activity>
+      android:screenOrientation="portrait" />
     <activity android:name=".jnitest.JniTestActivity" />
     <activity
       android:name=".MainActivity"
